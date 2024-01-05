@@ -1,17 +1,25 @@
-import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, Button } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { Text, View, StyleSheet, Button, Modal, Animated } from 'react-native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
-import { fetchProduct } from '../api';
+import { addProduct, fetchProductName } from '../api';
 
 const Barcode = () => {
+    const translateY = useRef(new Animated.Value(600)).current;
+    const [isModalVisible, setIsModalVisible] = useState(false);
     const [hasPermission, setHasPermission] = useState(null);
     const [scanned, setScanned] = useState(false);
     const [data,setData] = useState(null);
 
-    const fetchProductDetails = async (data) => {
-        const fetchedData = await fetchProduct(data);
+    const addProductDetails = async (data) => {
+        const fetchedData = await addProduct(data);
         setData(fetchedData);
         console.log(fetchedData.product.product_name);
+    }
+
+    const fetchName = async (data) => {
+        const name = await fetchProductName(data)
+        console.log(name)
+        setData(name)
     }
     
     useEffect(() => {
@@ -21,13 +29,32 @@ const Barcode = () => {
         };
 
         getBarCodeScannerPermissions();
-    }, []);
+    }, [data]);
 
     const handleBarCodeScanned = ({ type, data }) => {
+        fetchName(data);
+        openModal();
+        setIsModalVisible(true)
         setScanned(true);
-        fetchProductDetails(data);
-        alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+        
+        // addProductDetails(data);
+        // alert(`Bar code with type ${type} and data ${data} has been scanned!`);
 
+    };
+    const openModal = () => {
+        setIsModalVisible(true);
+        Animated.timing(translateY, {
+          toValue: 0,
+          duration: 300,
+          useNativeDriver: true,
+        }).start();
+    };
+    const closeModal = () => {
+        Animated.timing(translateY, {
+          toValue: 600,
+          duration: 300,
+          useNativeDriver: true,
+        }).start(() => setIsModalVisible(false));
     };
 
     if (hasPermission === null) {
@@ -39,11 +66,22 @@ const Barcode = () => {
 
     return (
         <View style={styles.container}>
-        <BarCodeScanner
-            onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-            style={StyleSheet.absoluteFillObject}
-        />
-        {scanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
+            <Modal transparent={true} visible={isModalVisible} onRequestClose={closeModal}>
+                <Animated.View style={[styles.modalContainer, { transform: [{ translateY }] }]}>
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
+                    <View style={{ backgroundColor: 'white', padding: 20, borderRadius: 10 }}>
+                        <Text>Data scanned:</Text>
+                        <Text>{data ? `Type: ${data}` : 'No data scanned'}</Text>
+                        <Button title="Close Modal" onPress={() => setIsModalVisible(false)} />
+                    </View>
+                    </View>
+                </Animated.View>
+            </Modal>
+            <BarCodeScanner
+                onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+                style={StyleSheet.absoluteFillObject}
+            />
+            {scanned && <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />}
         </View>
     );
 }
@@ -55,6 +93,16 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       justifyContent: 'center',
     },
+    modalContainer: {
+        position: 'absolute',
+        bottom: 0,
+        width: '100%',
+        backgroundColor: '#fff',
+        padding: 20,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        elevation: 5,
+      },
 });
 
 export default Barcode;
