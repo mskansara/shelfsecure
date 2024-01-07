@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import Barcode from '../screens/Barcode';
 import Products from '../screens/Products';
 import { Ionicons } from '@expo/vector-icons'; 
+import Modal from '../screens/Modal';
 
 const Tab = createBottomTabNavigator();
 

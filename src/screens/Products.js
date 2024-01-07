@@ -11,7 +11,7 @@ const Products = () => {
         try {
             const fetchedData = await fetchProducts();
             setData(fetchedData)
-            console.log(data)
+            
 
         } catch(error) {
             console.log(error)
@@ -23,7 +23,7 @@ const Products = () => {
     };
     useEffect(() => {
         fetchAllProducts();
-    }, [])
+    }, [data])
 
     return (
         <ScrollView>

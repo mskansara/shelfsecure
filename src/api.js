@@ -24,23 +24,12 @@ export async function fetchProductName(barcode) {
         console.log(error)
     }
 }
-export async function addProduct(barcode) {
+export async function addProduct(barcode, product_name, expiry_date) {
     try {
-        // console.log(barcode)
-        const response = await fetch(`https://world.openfoodfacts.org/api/v1/product/${barcode}.json`)
-        if (!response.ok) {
-            console.log(response)
-        }
-        
-        const fetchedData = await(response.json())
-
-        data.product_name = fetchedData.product.product_name
+        data.product_name = product_name
         data.barcode = barcode
-        data.expiry_date = timestamp
-        
+        data.expiry_date = expiry_date
         const docRef = await addDoc(myCollection, data);
-
-        return await response.json()
     } catch(error) {
         console.log(error)
     }
