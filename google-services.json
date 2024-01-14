@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "967155727244",
+    "project_id": "shelf-42cf0",
+    "storage_bucket": "shelf-42cf0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:967155727244:android:bbdcbb56e219e55b94f4a9",
+        "android_client_info": {
+          "package_name": "com.manthan98.shelfsecure"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAik4XjWV2kAY3TcjEGTvX_vR_t749opJ8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

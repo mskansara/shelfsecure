@@ -6,7 +6,8 @@ import { Card, Title, Paragraph } from 'react-native-paper';
 const Products = () => {
     const [data, setData] = useState([])
     // setData(fetchedData);
-
+    const today = new Date();
+    
     const fetchAllProducts = async () => {
         try {
             const fetchedData = await fetchProducts();
@@ -33,7 +34,7 @@ const Products = () => {
                     <Title>Product Name: {doc.product_name}</Title>
                     <Paragraph>Expiry Date: {formatTimestamp(doc.expiry_date)}</Paragraph>
                     <Paragraph>Barcode: {doc.barcode}</Paragraph>
-                    {/* Add additional Paragraph components for other fields as needed */}
+                    <Paragraph>Status: {today >= doc.expiry_date.toDate() ? <Paragraph style={{color: 'red'}}>Expired</Paragraph> : <Paragraph style={{color: 'green'}}>Good</Paragraph>}</Paragraph>
                     </Card.Content>
                 </Card>
             ))}

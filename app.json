@@ -17,14 +17,21 @@
     "ios": {
       "supportsTablet": true
     },
-    "android": {
+    "android": {  
+      "googleServicesFile": "./google-services.json",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.manthan98.shelfsecure"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "afa9a212-3ef4-49ca-8f0f-780f3d221851"
+      }
     }
   }
 }
