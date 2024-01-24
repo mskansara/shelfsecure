@@ -1,6 +1,6 @@
 const API_URL = 'https://world.openfoodfacts.org/api/v1/product'
 import { db } from './FirebaseConfig'
-import { collection, addDoc, Timestamp, getDocs } from 'firebase/firestore';
+import { collection, addDoc, Timestamp, getDocs, deleteDoc, doc } from 'firebase/firestore';
 import { Platform } from 'react-native';
 import * as Device from 'expo-device';
 import * as Notifications from 'expo-notifications';
@@ -27,6 +27,18 @@ export async function fetchProductName(barcode) {
         console.log(error)
     }
 }
+
+export async function deleteOneProduct(id) {
+    // console.log(id);
+    try {
+        const response = await deleteDoc(doc(db, "products", id))
+        console.log(response)
+        return response;
+    } catch(err) {
+        console.log(err)
+    }
+};
+
 export async function addProduct(barcode, product_name, expiry_date) {
     try {
         data.product_name = product_name

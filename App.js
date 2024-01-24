@@ -1,6 +1,5 @@
 import Navigation from './src/components/Navigation';
 import React, { useState, useEffect, useRef } from 'react';
-import { Text, View, Button, Platform } from 'react-native';
 import * as Notifications from 'expo-notifications';
 import { sendPushNotification, registerForPushNotificationsAsync, checkExpiredProducts } from './src/api';
 
@@ -8,6 +7,7 @@ import { sendPushNotification, registerForPushNotificationsAsync, checkExpiredPr
 
 
 export default function App() {
+
   const [expoPushToken, setExpoPushToken] = useState('');
   const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
@@ -29,31 +29,30 @@ export default function App() {
       }
     }
     notificationTriggeredToday = true;
-    console.log('In sendNotification function - ', notificationTriggeredToday);
+    
   }
 
   useEffect(() => {
     registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
-    console.log(expoPushToken)
     notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
       setNotification(notification);
     });
 
     responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
-      // console.log(response);
+      
     });
-    // sendNotification();
+
     const interval = setInterval(() => {
       notificationTriggeredToday = false;
       sendNotification();
-      console.log('In set interval - ', notificationTriggeredToday)
-    }, 10000);
+      
+    }, 24 * 60 * 60 * 1000);
     return () => {
       Notifications.removeNotificationSubscription(notificationListener.current);
       Notifications.removeNotificationSubscription(responseListener.current);
       clearInterval(interval);
     };
-  }, []);
+  }, [expoPushToken]);
 
 
   return (

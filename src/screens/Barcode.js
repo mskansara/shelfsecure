@@ -64,21 +64,17 @@ const Barcode = ({navigation}) => {
     const handlePresentModalPress = useCallback(() => {
       bottomSheetModalRef.current?.present();
     }, []);
+
     const handleSheetChanges = useCallback((index) => {
       console.log('handleSheetChanges', index);
     }, []);
 
-    
-
     const addProductDetails = async () => {
         const fetchedData = await addProduct(barcode, productName, date);
-        
-        
     }
 
     const fetchName = async (barcode) => {
         const name = await fetchProductName(barcode)
-        
         setProductName(name)
         setBarcode(barcode)
         handlePresentModalPress();
@@ -88,21 +84,18 @@ const Barcode = ({navigation}) => {
         setHasPermission(status === 'granted');
         
     };
+
     useEffect(() => {
         getBarCodeScannerPermissions();
         setScanned(false);
-        
+        setScanning(false)
     }, []);
-
-  
 
     const handleBarCodeScanned = ({ type, data }) => {
         fetchName(data);
-        // setIsModalVisible(true)
         setShowModal(true);
         setScanned(true);
-        // addProductDetails(data);
-        // alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+    
     };
 
     const scanAgain = () => {
@@ -186,7 +179,6 @@ const Barcode = ({navigation}) => {
                         
                                 </View>
                             </BottomSheetModal>
-                            
                         </View>
                     </BottomSheetModalProvider>
                 )}

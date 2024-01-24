@@ -15,7 +15,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.manthan98.shelfsecure"
     },
     "android": {  
       "googleServicesFile": "./google-services.json",
